@@ -1,25 +1,360 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Ryan's Deck Staining</title>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CBT Games</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    h1 { color: #2c3e50; }
-    .gallery img { max-width: 200px; margin: 10px; }
+    body {
+      margin: 0;
+      font-family: 'Trebuchet MS', sans-serif;
+      background: #0a0a0a;
+      color: #eee;
+    }
+
+    /* Header */
+    header {
+      position: relative;
+      text-align: center;
+      padding: 2rem 1rem;
+      background: radial-gradient(circle at top, #ff0000, #000);
+      color: #fff;
+      box-shadow: 0 0 25px rgba(255,0,0,0.6);
+    }
+    header h1 {
+      font-size: 3rem;
+      margin: 0;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-shadow: 0 0 15px #ff0000, 0 0 30px #ff3333;
+    }
+    header p {
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+      color: #ff5555;
+      font-weight: bold;
+    }
+
+    /* Search + Random Container */
+    .header-tools {
+      position: absolute;
+      /* place the tools at the top-left of the header */
+      top: 20px;
+      left: 20px;
+      transform: none;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .header-tools input {
+      padding: 6px 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .header-tools button {
+      padding: 6px 12px;
+      border-radius: 5px;
+      border: none;
+      font-weight: bold;
+      background: linear-gradient(90deg, #660000, #ff0000);
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .header-tools button:hover {
+      background: linear-gradient(90deg, #ff0000, #660000);
+      box-shadow: 0 0 10px #ff0000, 0 0 20px #ff3333;
+    }
+
+    /* Responsive: on small screens place the search/tools below the header content */
+    @media (max-width: 600px) {
+      .header-tools {
+        position: static;
+        transform: none;
+        margin-top: 1rem;
+        justify-content: center;
+      }
+      header {
+        padding: 2rem 0.5rem;
+      }
+    }
+
+    /* Game Grid */
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 40px;
+      /* allow the grid to flex and fill remaining space next to sidebar */
+      flex: 1 1 auto;
+      max-width: none;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    /* Main layout: game grid + right sidebar */
+    .main {
+      display: flex;
+      gap: 25px;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .side-list {
+      /* make it twice as wide and sit on the left via flex order */
+      width: 200px;
+      background: #101010;
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 15px;
+      color: #ddd;
+      height: fit-content;
+      align-self: flex-start;
+      order: -1;
+      box-shadow: 0 0 10px rgba(255,0,0,0.12);
+    }
+    .side-list h3 {
+      margin: 0 0 10px 0;
+      color: #ff3333;
+      text-shadow: 0 0 8px #ff0000;
+    }
+    .side-list a {
+      display: block;
+      padding: 6px 8px;
+      color: #eee;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+    .side-list a:hover {
+      background: rgba(255,0,0,0.06);
+      color: #fff;
+    }
+
+    @media (max-width: 1000px) {
+      .main {
+        flex-direction: column;
+        padding: 10px;
+      }
+      .side-list {
+        width: 100%;
+      }
+    }
+
+    /* Game Card */
+    .game-card {
+      background: #141414;
+      border-radius: 15px;
+      overflow: hidden;
+      text-align: center;
+      border: 2px solid #222;
+      box-shadow: 0 0 10px rgba(255,0,0,0.3);
+      transition: transform 0.25s, box-shadow 0.25s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .game-card:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 0 25px rgba(255,0,0,0.8), 0 0 40px rgba(255,0,0,0.6);
+    }
+
+    .game-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-bottom: 2px solid #333;
+    }
+
+    .game-card h2 {
+      font-size: 1.4rem;
+      margin: 15px 0;
+      color: #ff3333;
+      text-shadow: 0 0 10px #ff0000, 0 0 20px #ff5555;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      font-size: 0.9rem;
+      color: #888;
+      border-top: 1px solid #222;
+      background: #0a0a0a;
+      box-shadow: 0 -5px 15px rgba(0,0,0,0.6);
+    }
   </style>
 </head>
 <body>
-  <h1>Ryan's Deck Staining</h1>
-  <p>Professional deck staining services in your area.</p>
-  <h2>Gallery</h2>
-  <div class="gallery">
-    <img src="Images/Deck1.jpg" alt="Deck Example 1">
-    <img src="Images/Deck2.jpg" alt="Deck Example 2">
+  <header>
+    <h1>CBT Games</h1>
+    <p>Play Fun & Interactive Browser Games</p>
+
+    <!-- Search and Random -->
+    <div class="header-tools">
+      <input type="text" id="searchBox" placeholder="Search games...">
+      <button onclick="randomGame()">Random Game</button>
+    </div>
+  </header>
+
+  <div class="main">
+    <section class="game-grid" id="gameGrid">
+    <a class="game-card" href="Source/EaglercraftZ_1.11.2.html" target="_blank">
+      <img src="Source/Images/Screenshot From 2025-10-03 19-33-55.png" alt="Eaglecraft">
+      <h2>Eaglecraft 1.8.8</h2>
+    </a>
+
+    <!-- Angry Birds -->
+    <a class="game-card" href="Source/angry-birds/index.html" target="_blank">
+      <img src="Source/Images/AngryBirds.png" alt="Angry Birds">
+      <h2>Angry Birds</h2>
+    </a>
+
+    <a class="game-card" href="Source/AweomeTanks2.html" target="_blank">
+      <img src="Source/Images/2.png" alt="Game 2">
+      <h2>Awesome Tanks 2</h2>
+    </a>
+
+    <a class="game-card" href="Source/2048/index.html" target="_blank">
+      <img src="Source/Images/2048.png" alt="Game 3">
+      <h2>2048</h2>
+    </a>
+
+    <a class="game-card" href="Source/slopeoffline.html" target="_blank">
+      <img src="Source/Images/Slop.png" alt="Game 4">
+      <h2>Slope</h2>
+    </a>
+
+    <a class="game-card" href="Source/Territorial.html" target="_blank">
+      <img src="Source/Images/TE.png" alt="Game 5">
+      <h2>Territorial</h2>
+    </a>
+
+    <a class="game-card" href="Source/Stack.html" target="_blank">
+      <img src="Source/Images/S.png" alt="Game 6">
+      <h2>Stack</h2>
+    </a>
+
+    <a class="game-card" href="Source/adarkroom/index.html" target="_blank">
+      <img src="Source/Images/ADARKROOM.png" alt="Game 7">
+      <h2>A Dark Room</h2>
+    </a>
+
+    <a class="game-card" href="Source/geometrydash/index.html" target="_blank">
+      <img src="Source/Images/download.jpg" alt="Game 8">
+      <h2>Geometry Dash</h2>
+    </a>
+
+    <a class="game-card" href="Source/SpaceGarden.html" target="_blank">
+      <img src="Source/Images/SG.png" alt="Game 9">
+      <h2>Space Garden</h2>
+    </a>
+
+    <a class="game-card" href="Source/AcsiiSpace.html" target="_blank">
+      <img src="Source/Images/ASCII.png" alt="Game 10">
+      <h2>ASCII</h2>
+    </a>
+
+    <a class="game-card" href="Source/dodge/index.html" target="_blank">
+      <img src="Source/Images/Doge.png" alt="Game 10">
+      <h2>Doge</h2>
+    </a>
+
+    <a class="game-card" href="Source/astray/index.html" target="_blank">
+      <img src="Source/Images/d.png" alt="Game 11">
+      <h2>Astray</h2>
+    </a>
+
+    <a class="game-card" href="Source/roadblocks/index.html" target="_blank">
+      <img src="Source/Images/RoadBlocks.png" alt="Game 12">
+      <h2>Road Blocks</h2>
+    </a>
+
+    <a class="game-card" href="Source/blackholesquare/index.html" target="_blank">
+      <img src="Source/Images/BlackHoleSquare.png" alt="Game 13">
+      <h2>Black Hole Square</h2>
+    </a>
+
+    <a class="game-card" href="Source/pixelracingcc-master/index.html" target="_blank">
+      <img src="Source/Images/PixelRacing.png" alt="Game 14">
+      <h2>Pixel Racing</h2>
+    </a>
+    <a class="game-card" href="Source/Chess-master/index.html" target="_blank">
+      <img src="Source/Images/Chess.png" alt="Game 15">
+      <h2>Chess</h2>
+    </a>
+    <a class="game-card" href="Source/flappy-bird-master/index.html" target="_blank">
+      <img src="Source/Images/FlappyBird.png" alt="Game 16">
+      <h2>FlappyBird</h2>
+    </a>
+    <a class="game-card" href="Source/FullScreenMario-master/index.html" target="_blank">
+      <img src="Source/Images/Supermario.png" alt="Game 17">
+      <h2>Super Mario Bros</h2>
+    </a>
+    <a class="game-card" href="Source/block-blast-main/index.html" target="_blank">
+      <img src="Source/Images/BlockBlast.png" alt="Game 18">
+      <h2>Block Blast</h2>
+    </a>
+    <a class="game-card" href="Source/tetris-newest-OS.html" target="_blank">
+      <img src="Source/Images/Tetris.png" alt="Game 18">
+      <h2>Tetris</h2>
+    </a>
+    </section>
+
+    <!-- Right text-only games list -->
+    <aside class="side-list" id="textGameList">
+      <h3>All Games</h3>
+      <!-- entries will be populated by JS from existing .game-card anchors -->
+    </aside>
   </div>
-  <h2>Contact</h2>
-  <p>Phone: 555-555-5555</p>
-  <p>Email: your@email.com</p>
+
+  <footer>
+    2025 CBT Games v1.2. No Rights Reserved. Have Fun!
+  </footer>
+
+  <script>
+    // Search filter
+    document.getElementById("searchBox").addEventListener("input", function() {
+      let filter = this.value.toLowerCase();
+      let games = document.querySelectorAll(".game-card");
+      games.forEach(game => {
+        let title = game.querySelector("h2").innerText.toLowerCase();
+        game.style.display = title.includes(filter) ? "block" : "none";
+      });
+    });
+
+    // Random game function
+    function randomGame() {
+      let games = document.querySelectorAll(".game-card");
+      let randomIndex = Math.floor(Math.random() * games.length);
+      let link = games[randomIndex].getAttribute("href");
+      window.open(link, "_blank");
+    }
+
+    // Populate right-side text-only game list
+    (function populateTextList(){
+      const listContainer = document.getElementById('textGameList');
+      if(!listContainer) return;
+
+      // find all game anchors in the grid
+      const cards = document.querySelectorAll('.game-card');
+      cards.forEach(card => {
+        const href = card.getAttribute('href');
+        const titleEl = card.querySelector('h2');
+        const title = titleEl ? titleEl.innerText.trim() : href;
+
+        const a = document.createElement('a');
+        a.href = href;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = title;
+        listContainer.appendChild(a);
+      });
+    })();
+  </script>
 </body>
 </html>
